@@ -1,7 +1,7 @@
 import { postId } from './sent-store'
 
 // meme-api 403s bare bot user-agents (e.g. python-urllib); a Mozilla token passes.
-const USER_AGENT = 'Mozilla/5.0 (compatible; slack-meme-poster/1.0)'
+export const USER_AGENT = 'Mozilla/5.0 (compatible; slack-meme-poster/1.0)'
 
 export interface Meme {
   id: string

@@ -2,7 +2,7 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import { URL } from 'url'
-import { fetchMemes } from './meme-api'
+import { fetchMemes, USER_AGENT } from './meme-api'
 import { pickMeme } from './select'
 import { hasSent, markSent } from './sent-store'
 import { postSlackMeme } from '../job/post-slack'
@@ -10,7 +10,7 @@ import { postSlackMeme } from '../job/post-slack'
 const SENT_DIR = `${process.env.MEMES_DIR ?? '/memes'}/humor-sent`
 
 async function downloadTo(imageUrl: string, destPath: string): Promise<void> {
-  const res = await fetch(imageUrl)
+  const res = await fetch(imageUrl, { headers: { 'User-Agent': USER_AGENT } })
   if (!res.ok) throw new Error(`Image download returned ${res.status}`)
   fs.writeFileSync(destPath, Buffer.from(await res.arrayBuffer()))
 }

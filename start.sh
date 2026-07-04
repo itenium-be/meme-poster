@@ -21,6 +21,14 @@ fi
 cd ../
 
 
+cd ./humor-job
+bun install
+if [ "$MEMEAPI_POST_ON_STARTUP" ]; then
+  bun run start
+fi
+cd ../
+
+
 # POST_CRON='0 16 * * fri'
 echo "Scheduling posting at: ${POST_CRON}"
 echo "${POST_CRON} ${BUN} /usr/scheduler/job/meme-poster.ts" > crontab.txt
@@ -29,6 +37,12 @@ echo "${POST_CRON} ${BUN} /usr/scheduler/job/meme-poster.ts" > crontab.txt
 if [ "$REDDIT_SUBREDDIT" ]; then
   echo "Scheduling Reddit posting at: ${REDDIT_POST_CRON}"
   echo "${REDDIT_POST_CRON} ${BUN} /usr/scheduler/reddit-job/index.ts" >> crontab.txt
+fi
+
+# Only schedule the meme-api job when a subreddit is configured.
+if [ "$MEMEAPI_SUBREDDIT" ]; then
+  echo "Scheduling meme-api posting at: ${MEMEAPI_POST_CRON}"
+  echo "${MEMEAPI_POST_CRON} ${BUN} /usr/scheduler/humor-job/index.ts" >> crontab.txt
 fi
 
 crontab crontab.txt
